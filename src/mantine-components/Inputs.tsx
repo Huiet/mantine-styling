@@ -58,6 +58,20 @@ const MantineInputs = () => {
         placeholder={'Placeholder text'}
         onChange={handleNumberInputChange}
         label="LumaNumberInput"></LumaNumberInput>
+
+      <LumaNumberInput
+        size={'md'}
+        value={numberInputVal}
+        placeholder={'Placeholder text'}
+        onChange={handleNumberInputChange}
+        label="LumaNumberInput"></LumaNumberInput>
+
+      <LumaNumberInput
+        size={'lg'}
+        value={numberInputVal}
+        placeholder={'Placeholder text'}
+        onChange={handleNumberInputChange}
+        label="LumaNumberInput"></LumaNumberInput>
       <TextInput label="Text input" placeholder={'Placeholder text'}/>
       <Select clearable={true} data={[
         {label: 'Option 1', value: 'option-1'},

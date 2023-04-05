@@ -25,19 +25,24 @@ export const useLumaInputStyles = createStyles((theme, { floating, size }: { flo
       theme.colors.gray[6]
       : theme.colors.gray[5],
     transition: size !== 'sm' ? 'transform 150ms ease, color 150ms ease, font-size 150ms ease': 'none',
-    transform: size !== 'sm' && floating ? `translate(0px, -9px)` : 'none',
+    transform: floating ?
+      size === 'md' ? 'translate(0px, -9px)' :
+        size === 'lg' ? 'translate(0px, -11px)' : 'none' : 'none',
     fontSize: floating ? theme.fontSizes.xs : theme.fontSizes.sm,
     fontWeight: floating ? 500 : 400,
   },
 
   input: {
+    fontSize: theme.fontSizes.sm,
     height: size === 'sm' ? '32px' :
-      '40px',
+      size === 'md' ? '40px' :
+        '48px',
     position: 'relative',
     paddingTop: size === 'sm' ? theme.spacing.xs :
     theme.spacing.lg,
-    paddingBottom: size === 'sm' ? '0px' :
+    paddingBottom: size === 'sm' ? theme.spacing.xxs :
     theme.spacing.sm,
+    paddingLeft: theme.spacing.sm,
     borderRadius: '8px',
 
     '&::placeholder': {

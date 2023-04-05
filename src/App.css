@@ -1,4 +1,8 @@
+body {
+  font-family: 'IBM Plex Sans', sans-serif;
+}
 #root {
+  font-family: 'IBM Plex Sans', sans-serif;
   max-width: 1280px;
   margin: 0 auto;
   padding: 2rem;

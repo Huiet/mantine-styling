@@ -32,7 +32,7 @@ const MantineInputs = () => {
       />
 
       <LumaSelect
-        size={'lg'}
+        // size={'lg'}
         value={selectInputVal}
         onChange={handleSelectInputChange}
         data={
@@ -53,6 +53,7 @@ const MantineInputs = () => {
         searchable={true}
         label={'lumaselect'}/>
       <LumaNumberInput
+        size={'sm'}
         value={numberInputVal}
         placeholder={'Placeholder text'}
         onChange={handleNumberInputChange}

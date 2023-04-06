@@ -12,6 +12,7 @@ export const LumaSelect = forwardRef<HTMLInputElement, LumaSelectProps>((props, 
   const {classes} = useLumaInputStyles({floating: !!props.value || focused, size: props.size || 'md'});
   return (
     <Select {...props}
+            size={'sm'} // pass small because of the existing changes that occur from mantine with other sizes
             classNames={classes}
             onFocus={() => setFocused(true)}
             onBlur={() => setFocused(false)}/>

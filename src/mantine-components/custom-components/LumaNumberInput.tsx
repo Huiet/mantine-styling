@@ -69,6 +69,7 @@ export const LumaNumberInput = forwardRef<HTMLInputElement, LumaNumberInputProps
   const { classes } = useLumaInputStyles({ floating: !!props.value || focused, size: props.size || 'md' });
   return (
     <NumberInput {...props} classNames={classes}
+                  size={'sm'}
                   ref={ref}
                   required={true}
                   onFocus={() => setFocused(true)}

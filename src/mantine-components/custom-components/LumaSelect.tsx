@@ -2,7 +2,7 @@ import React, { forwardRef, useState } from 'react';
 import { Select, SelectProps } from '@mantine/core';
 import { useLumaInputStyles } from './LumaNumberInput';
 
-export interface LumaSelectProps extends SelectProps {
+interface LumaSelectProps extends SelectProps {
   size?: 'sm' | 'md' | 'lg';
 }
 

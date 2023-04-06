@@ -1,13 +1,14 @@
-import { forwardRef, useState } from 'react';
-import { createStyles, NumberInputProps, NumberInput } from '@mantine/core';
+import React, { forwardRef, useState } from 'react';
+import { acceptedSizes, useLumaInputStyles } from './LumaNumberInput';
+import { createStyles, MultiSelect, MultiSelectProps, Select, SelectProps } from '@mantine/core';
+
+interface LumaMultiSelectProps extends MultiSelectProps {
+  size?: 'sm' | 'md' | 'lg';
+}
 
 
-export type acceptedSizes = 'sm' | 'md' | 'lg';
 
-
-
-
-export const useLumaInputStyles = createStyles((theme, { floating, size }: { floating: boolean, size: acceptedSizes }) => ({
+export const useMulteSelectStyles = createStyles((theme, { floating, size }: { floating: boolean, size: acceptedSizes }) => ({
   root: {
     position: 'relative',
     fontSize: theme.fontSizes.sm,
@@ -38,10 +39,10 @@ export const useLumaInputStyles = createStyles((theme, { floating, size }: { flo
       size === 'md' ? '40px' :
         '48px',
     position: 'relative',
-    paddingTop: size === 'sm' ? theme.spacing.xs :
-    theme.spacing.lg,
+    paddingTop: size === 'sm' ? 0 :
+      theme.spacing.sm,
     paddingBottom: size === 'sm' ? theme.spacing.xxs :
-    theme.spacing.sm,
+      theme.spacing.sm,
     paddingLeft: theme.spacing.sm,
     borderRadius: '8px',
 
@@ -60,20 +61,16 @@ export const useLumaInputStyles = createStyles((theme, { floating, size }: { flo
   },
 }));
 
-export interface LumaNumberInputProps extends NumberInputProps {
-  size?: 'sm' | 'md' | 'lg';
-}
 
-export const LumaNumberInput = forwardRef<HTMLInputElement, LumaNumberInputProps>((props: LumaNumberInputProps, ref)  => {
+export const LumaMultiSelect = forwardRef<HTMLInputElement, LumaMultiSelectProps>((props, ref) => {
   const [focused, setFocused] = useState(false);
-  const { classes } = useLumaInputStyles({ floating: !!props.value || focused, size: props.size || 'md' });
+  console.log('props', props)
+  const {classes} = useMulteSelectStyles({floating: !!props.value || focused, size: props.size || 'md'});
   return (
-    <NumberInput {...props} classNames={classes}
-                  size={'sm'}
-                  ref={ref}
-                  required={true}
-                  onFocus={() => setFocused(true)}
-                  onBlur={() => setFocused(false)}
-    />
+    <MultiSelect {...props}
+            size={'sm'} // pass small because of the existing changes that occur from mantine with other sizes
+            classNames={classes}
+            onFocus={() => setFocused(true)}
+            onBlur={() => setFocused(false)}/>
   );
 });

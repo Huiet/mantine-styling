@@ -14,16 +14,22 @@ import {
 } from '@mantine/core';
 import { LumaNumberInput } from './custom-components/LumaNumberInput';
 import { LumaSelect } from './custom-components/LumaSelect';
+import { LumaMultiSelect } from './custom-components/LumaMultiSelect';
 
 const MantineInputs = () => {
   const [numberInputVal, setNumberInputVal] = useState<number|''>('');
   const [selectInputVal, setSelectInputVal] = useState('option-1');
+  const [multiSelectInputVal, setMultiSelectInputVal] = useState<string[]>([]);
   const handleSelectInputChange = (value: string) => {
     setSelectInputVal(value);
   };
   const handleNumberInputChange = (value: number) => {
     setNumberInputVal(value);
-  }
+  };
+
+  const handleMultiSelectInputChange = (value: string[]) => {
+    setMultiSelectInputVal(value);
+  };
   return (
     <Stack>
       <NumberInput label="Number input"
@@ -96,6 +102,80 @@ const MantineInputs = () => {
         placeholder={'Placeholder text'}
         searchable={true}
         label={'lumaselect'}/>
+
+
+
+
+
+
+      <LumaMultiSelect
+        size={'sm'}
+        value={multiSelectInputVal}
+          onChange={handleMultiSelectInputChange}
+        data={
+          [
+            {label: 'Option 1', value: 'option-1'},
+            {label: 'Option 2', value: 'option-2'},
+            {label: 'Option 3', value: 'option-3'},
+            {label: 'Option 4', value: 'option-4'},
+            {label: 'Option 5', value: 'option-5'},
+            {label: 'Option 6', value: 'option-6'},
+            {label: 'Option 7', value: 'option-7'},
+            {label: 'Option 8', value: 'option-8'},
+            {label: 'Option 9', value: 'option-9'},
+          ]
+        }
+        clearable={true}
+        placeholder={'Placeholder text'}
+        searchable={true}
+        label={'Luma Multi Select'}/>
+
+
+      <LumaMultiSelect
+        size={'md'}
+        value={multiSelectInputVal}
+        onChange={handleMultiSelectInputChange}
+        data={
+          [
+            {label: 'Option 1', value: 'option-1'},
+            {label: 'Option 2', value: 'option-2'},
+            {label: 'Option 3', value: 'option-3'},
+            {label: 'Option 4', value: 'option-4'},
+            {label: 'Option 5', value: 'option-5'},
+            {label: 'Option 6', value: 'option-6'},
+            {label: 'Option 7', value: 'option-7'},
+            {label: 'Option 8', value: 'option-8'},
+            {label: 'Option 9', value: 'option-9'},
+          ]
+        }
+        clearable={true}
+        placeholder={'Placeholder text'}
+        searchable={true}
+        label={'Luma Multi Select'}/>
+
+      <LumaMultiSelect
+        size={'lg'}
+        value={multiSelectInputVal}
+        onChange={handleMultiSelectInputChange}
+        data={
+          [
+            {label: 'Option 1', value: 'option-1'},
+            {label: 'Option 2', value: 'option-2'},
+            {label: 'Option 3', value: 'option-3'},
+            {label: 'Option 4', value: 'option-4'},
+            {label: 'Option 5', value: 'option-5'},
+            {label: 'Option 6', value: 'option-6'},
+            {label: 'Option 7', value: 'option-7'},
+            {label: 'Option 8', value: 'option-8'},
+            {label: 'Option 9', value: 'option-9'},
+          ]
+        }
+        clearable={true}
+        placeholder={'Placeholder text'}
+        searchable={true}
+        label={'Luma Multi Select'}/>
+
+
       <LumaNumberInput
         size={'sm'}
         value={numberInputVal}

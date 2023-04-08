@@ -15,11 +15,14 @@ import {
 import { LumaNumberInput } from './custom-components/LumaNumberInput';
 import { LumaSelect } from './custom-components/LumaSelect';
 import { LumaMultiSelect } from './custom-components/LumaMultiSelect';
+import { RowVirtualizerDynamic } from '../VirtualScroll/VirtualScrollExample';
+import { CustomMultiSelect, SelectItemProps } from './MultiSelect/MultiSelect';
 
 const MantineInputs = () => {
   const [numberInputVal, setNumberInputVal] = useState<number|''>('');
   const [selectInputVal, setSelectInputVal] = useState('option-1');
   const [multiSelectInputVal, setMultiSelectInputVal] = useState<string[]>([]);
+  const [customMultiSelectInputVal, setCustomMultiSelectInputVal] = useState<SelectItemProps[]>([]);
   const handleSelectInputChange = (value: string) => {
     setSelectInputVal(value);
   };
@@ -27,11 +30,29 @@ const MantineInputs = () => {
     setNumberInputVal(value);
   };
 
+  const handleCustomMultiSelectInputChange = (value: SelectItemProps[]) => {
+    setCustomMultiSelectInputVal(value);
+  }
   const handleMultiSelectInputChange = (value: string[]) => {
     setMultiSelectInputVal(value);
   };
   return (
     <Stack>
+      <CustomMultiSelect
+        searchable={true}
+        clearable={true}
+        enableSelectAll={true}
+        data={
+          [{label: 'Option 1', value: 'option-1'},
+            {label: 'Option 2', value: 'option-2'},
+            {label: 'Option 3', value: 'option-3'},
+            {label: 'Option 4', value: 'option-4'},]
+        } label={'The cool Multi Select'}
+        value={customMultiSelectInputVal}
+        onChange={handleCustomMultiSelectInputChange}
+      />
+
+
       <NumberInput label="Number input"
                    value={numberInputVal}
                     onChange={handleNumberInputChange}
@@ -254,6 +275,11 @@ const MantineInputs = () => {
         placeholder="Your comment"
         label="Text Area"
       />
+
+      <RowVirtualizerDynamic/>
+
+
+
     </Stack>
   );
 };

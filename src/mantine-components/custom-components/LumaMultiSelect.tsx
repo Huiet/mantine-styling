@@ -8,7 +8,7 @@ interface LumaMultiSelectProps extends MultiSelectProps {
 
 
 
-export const useMulteSelectStyles = createStyles((theme, { floating, size }: { floating: boolean, size: acceptedSizes }) => ({
+export const useMultiSelectStyles = createStyles((theme, { floating, size }: { floating: boolean, size: acceptedSizes }) => ({
   root: {
     position: 'relative',
     fontSize: theme.fontSizes.sm,
@@ -40,9 +40,9 @@ export const useMulteSelectStyles = createStyles((theme, { floating, size }: { f
         '48px',
     position: 'relative',
     paddingTop: size === 'sm' ? 0 :
-      theme.spacing.sm,
+      theme.spacing.md,
     paddingBottom: size === 'sm' ? theme.spacing.xxs :
-      theme.spacing.sm,
+      theme.spacing.xxl,
     paddingLeft: theme.spacing.sm,
     borderRadius: '8px',
 
@@ -65,9 +65,12 @@ export const useMulteSelectStyles = createStyles((theme, { floating, size }: { f
 export const LumaMultiSelect = forwardRef<HTMLInputElement, LumaMultiSelectProps>((props, ref) => {
   const [focused, setFocused] = useState(false);
   console.log('props', props)
-  const {classes} = useMulteSelectStyles({floating: !!props.value || focused, size: props.size || 'md'});
+  const {classes} = useMultiSelectStyles({floating: !!props.value || focused, size: props.size || 'md'});
+
   return (
     <MultiSelect {...props}
+      style={{width: '40em'}}
+                 maxSelectedValues={3}
             size={'sm'} // pass small because of the existing changes that occur from mantine with other sizes
             classNames={classes}
             onFocus={() => setFocused(true)}

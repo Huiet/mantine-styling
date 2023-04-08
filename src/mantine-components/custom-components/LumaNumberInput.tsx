@@ -4,9 +4,6 @@ import { createStyles, NumberInputProps, NumberInput } from '@mantine/core';
 
 export type acceptedSizes = 'sm' | 'md' | 'lg';
 
-
-
-
 export const useLumaInputStyles = createStyles((theme, { floating, size }: { floating: boolean, size: acceptedSizes }) => ({
   root: {
     position: 'relative',

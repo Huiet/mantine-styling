@@ -39,6 +39,7 @@ const MantineInputs = () => {
   return (
     <Stack>
       <CustomMultiSelect
+        virtualize={true}
         searchable={true}
         clearable={true}
         enableSelectAll={true}
@@ -46,7 +47,12 @@ const MantineInputs = () => {
           [{label: 'Option 1', value: 'option-1'},
             {label: 'Option 2', value: 'option-2'},
             {label: 'Option 3', value: 'option-3'},
-            {label: 'Option 4', value: 'option-4'},]
+            {label: 'Option 4', value: 'option-4'},
+          ...Array.from({ length: 10 }, (_, i) => ({
+            label: `Option ${i + 5}`,
+            value: `option-${i + 5}`,
+          })),
+          ]
         } label={'The cool Multi Select'}
         value={customMultiSelectInputVal}
         onChange={handleCustomMultiSelectInputChange}

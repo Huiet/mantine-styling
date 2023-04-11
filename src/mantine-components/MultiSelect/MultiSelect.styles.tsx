@@ -1,7 +1,8 @@
 import styled from '@emotion/styled';
 
-export const MultiSelectListContainer = styled.ul<{ isOpen: boolean }>`
+export const MultiSelectListContainer = styled.ul<{ isOpen: boolean, size: 'sm' | 'md' | 'lg' }>`
   font-size: 12px;
+  font-size: ${(props) => (props.size === 'sm' ? '12px' : props.size === 'md' ? '14px' : '16px')};
   visibility: ${(props) => (props.isOpen ? 'visible' : 'hidden')};
   position: absolute;
   top: 3rem;
@@ -40,6 +41,7 @@ export const MultiSelectListItem = styled.li<{
   &:hover {
     background-color: #f2f4f5;
   }
+  
 `;
 
 export const NoResultsFound = styled.div`

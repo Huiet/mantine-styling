@@ -1,6 +1,6 @@
 import { IconX, IconSelector } from '@tabler/icons-react';
 import React, {
-  ComponentPropsWithoutRef,
+  ComponentPropsWithoutRef, ForwardedRef,
   forwardRef,
   useMemo,
   useRef,
@@ -26,10 +26,8 @@ export interface SelectItemProps {
 }
 
 export interface CustomMultiSelectProps
-  extends Omit<
-    ComponentPropsWithoutRef<'input'>,
-    'onChange' | 'size' | 'value' | 'data'
-    > {
+  extends Omit<ComponentPropsWithoutRef<'input'>,
+    'onChange' | 'size' | 'value' | 'data'> {
   value: SelectItemProps[];
   data: SelectItemProps[];
   label: string;
@@ -60,16 +58,16 @@ export const CustomMultiSelect = forwardRef<HTMLInputElement, CustomMultiSelectP
       label,
       onChange,
       enableSelectAll,
-      clearable,
+      clearable = false,
       error,
       virtualize = false,
       disabled = false,
     }: LumaMultiSelectProps,
-    ref
+    ref: ForwardedRef<HTMLInputElement>
   ) => {
     const uniqueId = useId();
     const items = useMemo(
-      () => data.map((x, index) => ({ ...x, index: index })),
+      () => data.map((x, index) => ({...x, index: index})),
       [data]
     );
     // const [selectedItems, setSelectedItems] = useState<SelectItemProps[]>([]);
@@ -80,10 +78,12 @@ export const CustomMultiSelect = forwardRef<HTMLInputElement, CustomMultiSelectP
     };
 
     const stateReducer = (state: any, actionAndChanges: any) => {
-      const { changes, type } = actionAndChanges;
+      const {changes, type} = actionAndChanges;
       // console.log('type', type);
+      console.log('here', type);
       switch (type) {
         case useSelect.stateChangeTypes.MenuBlur:
+        case useSelect.stateChangeTypes.ToggleButtonBlur:
           setSearchValue('');
           return changes;
         case useSelect.stateChangeTypes.MenuKeyDownEnter:
@@ -110,8 +110,8 @@ export const CustomMultiSelect = forwardRef<HTMLInputElement, CustomMultiSelectP
       itemToString: (item: SelectItemProps | null) => item?.label ?? '',
       stateReducer,
       selectedItem: null,
-      onSelectedItemChange: ({ selectedItem }) => {
-        // console.log('selected', selectedItem, value);
+      onSelectedItemChange: ({selectedItem}) => {
+        console.log('selected', selectedItem, value);
         let newSelectedItems;
         if (!selectedItem) {
           if (!value.length) {
@@ -147,13 +147,16 @@ export const CustomMultiSelect = forwardRef<HTMLInputElement, CustomMultiSelectP
         document.getElementById(getToggleButtonProps().id)
       );
 
+      // console.log('what', getAvailableTextWidth(
+      //   (ref)
+      // ))
       const font = getCanvasFont(
         document.getElementById(getToggleButtonProps().id)
       );
       const canvas = document.createElement('canvas');
       for (let i = 0; i < value.length; i++) {
         const displayValue = value[i].label;
-        const elementWidth = getTextWidth(displayValue, font, canvas);
+        const elementWidth = getTextWidth(displayValue + ', ', font, canvas);
         if (
           currentElementsWidth + elementWidth >
           widthAvailable - numberPadding
@@ -168,15 +171,15 @@ export const CustomMultiSelect = forwardRef<HTMLInputElement, CustomMultiSelectP
                 font,
                 canvas
               );
-              if (elementWidth > widthAvailable) {
+              if (elementWidth > (widthAvailable - numberPadding)) {
                 return (
                   displayValue.substring(0, x - 12) +
-                  `... ${value.length > 1 ? `+${value.length - 1}` : ''}`
+                  `... ${value.length > 1 ? `+${value.length - i}` : ''}`
                 );
               }
             }
           }
-          returnString += `+${value.length - 1}`;
+          returnString += `+${value.length - i}`;
           return returnString;
         }
         returnString += displayValue;
@@ -231,7 +234,7 @@ export const CustomMultiSelect = forwardRef<HTMLInputElement, CustomMultiSelectP
     }, [searchable, searchValue, value, items, filteredData]);
 
     const getRightSection = useMemo(() => {
-      if (value.length > 0) {
+      if (value.length > 0 && clearable) {
         return (
           <div
             role={'button'}
@@ -242,7 +245,7 @@ export const CustomMultiSelect = forwardRef<HTMLInputElement, CustomMultiSelectP
               }
             }}
             onClick={handleClearItems}
-            style={{ display: 'flex', alignItems: 'center', padding: '1em' }}
+            style={{display: 'flex', alignItems: 'center', padding: '1em'}}
           >
             <IconX size={12}/>
           </div>
@@ -268,7 +271,7 @@ export const CustomMultiSelect = forwardRef<HTMLInputElement, CustomMultiSelectP
     const listItems = virtualizer.getVirtualItems();
     const mergedContainerRefs = useMergedRef(getMenuProps().ref, parentRef);
     return (
-      <div style={{ position: 'relative', cursor: 'pointer' }}>
+      <div style={{position: 'relative', cursor: 'pointer'}}>
         <TextInput
           error={error}
           disabled={disabled}
@@ -279,7 +282,7 @@ export const CustomMultiSelect = forwardRef<HTMLInputElement, CustomMultiSelectP
               cursor: 'pointer',
             },
             rightSection: {
-              pointerEvents: 'none',
+              pointerEvents: clearable && value?.length > 0 ? 'default' : 'none',
             },
             label: {
               cursor: 'pointer',
@@ -309,7 +312,7 @@ export const CustomMultiSelect = forwardRef<HTMLInputElement, CustomMultiSelectP
           {/* eslint-disable-next-line react/prop-types */}
           {searchable && items?.length > 0 && (
             <SearchSection
-              placeholder={'Search...'}
+              placeholder={`Search...`}
               onChange={handleSearchChange}
               onKeyDown={(e) => {
                 if (e.code === 'Space') {
@@ -325,14 +328,11 @@ export const CustomMultiSelect = forwardRef<HTMLInputElement, CustomMultiSelectP
               style={{
                 position: 'sticky',
                 top: searchable ? '32px' : '0',
-                backgroundColor: '#fff',
                 zIndex: '1',
               }}
             >
               <Checkbox
-                onClick={(e) => {
-                  e.stopPropagation();
-                }}
+                style={{pointerEvents: 'none'}}
                 readOnly={true}
                 checked={isSelectAllChecked}
               ></Checkbox>
@@ -341,7 +341,7 @@ export const CustomMultiSelect = forwardRef<HTMLInputElement, CustomMultiSelectP
           )}
           {filteredData.length > 0 ? (
             virtualize ? (
-              <div style={{ width: '100%' }}>
+              <div style={{width: '100%'}}>
                 <div
                   style={{
                     height: virtualizer.getTotalSize(),
@@ -358,7 +358,7 @@ export const CustomMultiSelect = forwardRef<HTMLInputElement, CustomMultiSelectP
                     {listItems.map((virtualRow) => (
                       <MultiSelectListItem
                         key={virtualRow.key}
-                        highlightedIndex={highlightedIndex === virtualRow.index}
+                        highlightedIndex={highlightedIndex}
                         index={virtualRow.index}
                         {...getItemProps({
                           item: filteredData[virtualRow.index],
@@ -366,13 +366,8 @@ export const CustomMultiSelect = forwardRef<HTMLInputElement, CustomMultiSelectP
                         })}
                       >
                         <Checkbox
-                          onClick={(e) => {
-                            e.stopPropagation();
-                          }}
-                          checkboxKey={
-                            filteredData[virtualRow.index].value + 'checkbox'
-                          }
-                          readonly={true}
+                          style={{pointerEvents: 'none'}}
+                          readOnly={true}
                           checked={value.some(
                             (x) =>
                               x.value === filteredData[virtualRow.index].value
@@ -390,14 +385,11 @@ export const CustomMultiSelect = forwardRef<HTMLInputElement, CustomMultiSelectP
                   key={item.value}
                   highlightedIndex={highlightedIndex}
                   index={item.index}
-                  {...getItemProps({ item, index: item.index })}
+                  {...getItemProps({item, index: item.index})}
                 >
                   <Checkbox
-                    onClick={(e) => {
-                      e.stopPropagation();
-                    }}
-                    checkboxKey={item.value + 'checkbox'}
-                    readonly={true}
+                    style={{pointerEvents: 'none'}}
+                    readOnly={true}
                     checked={value.some((x) => x.value === item.value)}
                   ></Checkbox>
                   {item.label}
@@ -413,4 +405,4 @@ export const CustomMultiSelect = forwardRef<HTMLInputElement, CustomMultiSelectP
   }
 );
 
-CustomMultiSelect.displayName = 'CutomMultiSelect';
+CustomMultiSelect.displayName = 'CustomMultiSelect';
